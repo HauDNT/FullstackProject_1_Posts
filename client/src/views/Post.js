@@ -2,18 +2,41 @@ import React, {useEffect, useState} from "react";
 import {useParams} from 'react-router-dom';
 import axios from 'axios';
 import '../styles/Post.scss';
+import { toast } from 'react-toastify';
 
 function Post() {
     let {id} = useParams();
-    const [postObject, setPostObject] = useState({});
-    let count = 0;
+    const [postObject, setPostObject] = useState({});           // Một bài Post là một đối tượng
+    const [commentsObject, setCommentsObject] = useState([]);   // Comments có rất nhiều nên nó là một mảng.
+    const [newComment, setNewComment] = useState("");
 
     useEffect(() => {
-        axios.get(`http://localhost:3001/posts/postId/${id}`).then((res) => {
+        axios.get(`http://localhost:3001/posts/${id}`).then((res) => {
             setPostObject(res.data);
-            console.log(count++);
-      });
+        });
+        axios.get(`http://localhost:3001/comments/${id}`).then((res) => {
+            setCommentsObject(res.data);
+        });
     }, [id]);
+
+    const addComment = () => {
+        if (newComment !== "") {
+            axios
+                .post(`http://localhost:3001/comments`, {
+                    commentBody: newComment, 
+                    PostId: id,
+                })
+                .then((res) => {
+                    const commentAdded = {commentBody: newComment};
+                    setCommentsObject([...commentsObject, commentAdded]);
+                    setNewComment("");
+                    toast.success("Comment success!");
+                });
+        }
+        else {
+            toast.error("You must type something!");
+        }
+    }
 
     return (
         <div className="postPage">
@@ -24,7 +47,21 @@ function Post() {
                     <div className="footer">{postObject.username}</div>
                 </div>
             </div>
-            <div className="rightSide"></div>
+            <div className="rightSide">
+                <div className="listOfComments">
+                    {commentsObject.map((comment, key) => {
+                        return (
+                            <div key={key} className='comment'>{ comment.commentBody }</div>
+                        )
+                    })}
+                </div>
+                <div className="addCommentContainer">
+                    <input type="text" value={newComment} placeholder="Comment..." autoComplete="off" onChange={(e) => {
+                        setNewComment(e.target.value);
+                    }} />
+                    <button onClick={addComment} type="submit">Add comment</button>
+                </div>
+            </div>
         </div>
     );
 }

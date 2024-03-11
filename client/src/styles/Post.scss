@@ -16,5 +16,58 @@
         height: calc(100vh - 70px);
         display: grid;
         place-items: center;
+
+        .addCommentContainer {
+            flex: 20%;
+            width: 100%;
+            display: grid;
+            place-items: center;
+            margin-top: 25px;
+
+            input, button {
+                border-radius: 8px;
+                border: none;
+            }
+    
+            button {
+                width: 500px;
+                height: 40px;
+                margin-top: 20px;
+                background-color: dodgerblue;
+                color: white;
+                opacity: 0.6;
+
+                &:hover {
+                    opacity: 1;
+                    cursor: pointer;
+                }
+            }
+
+            input {
+                width: 500px;
+                height: 100px;
+                padding-left: 10px;
+                border: 2px solid dodgerblue;
+            }
+        }
+
+        .listOfComments {
+            flex: 80%;
+            width: 100%;
+            height: 400px;
+            overflow-y: scroll;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            .comment {
+                width: 70%;
+                height: auto;
+                padding: 30px;
+                border: 1px solid lightgray;
+                border-radius: 5px;
+                margin-top: 20px;
+            }
+        }
     }
 }

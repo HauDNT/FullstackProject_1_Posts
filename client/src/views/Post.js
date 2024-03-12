@@ -22,15 +22,26 @@ function Post() {
     const addComment = () => {
         if (newComment !== "") {
             axios
-                .post(`http://localhost:3001/comments`, {
+                .post("http://localhost:3001/comments", {
                     commentBody: newComment, 
                     PostId: id,
+                }, 
+                {
+                    // Authen token:
+                    headers: {
+                        accessToken: sessionStorage.getItem("accessToken")
+                    }
                 })
                 .then((res) => {
-                    const commentAdded = {commentBody: newComment};
-                    setCommentsObject([...commentsObject, commentAdded]);
-                    setNewComment("");
-                    toast.success("Comment success!");
+                    if (res.data.error) {
+                        toast.error("You must login!");
+                    }
+                    else {
+                        const commentAdded = {commentBody: newComment};
+                        setCommentsObject([...commentsObject, commentAdded]);
+                        setNewComment("");
+                        toast.success("Comment success!");
+                    }
                 });
         }
         else {

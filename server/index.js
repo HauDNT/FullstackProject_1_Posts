@@ -3,8 +3,10 @@ const app = express();
 const port = 3001;
 const db = require('./models');
 const cors = require('cors');
+const body_parser = require('body-parser');
 
-app.use(express.json());
+app.use(body_parser.urlencoded({extended: true}));
+app.use(body_parser.json());
 app.use(cors());
 
 // Routers:

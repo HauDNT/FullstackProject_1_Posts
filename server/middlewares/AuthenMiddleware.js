@@ -15,9 +15,8 @@ const validateToken = (req, res, next) => {
         }
     } catch (err) {
         return res.json({error: err});
-        // console.error("Error in validateToken middleware:", err);
-        // return res.json({ error: "Invalid token" });
     }
 };
 
 module.exports = {validateToken};
+// Ta xuất một đối tượng có thuộc tính validateToken

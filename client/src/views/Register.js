@@ -12,19 +12,26 @@ function Register() {
     const initialValues = {
         username: '',
         password: '',
+        re_password: '',
     };
 
     const validationSchema = Yup.object().shape({
         username: Yup.string().min(3).max(15).required("You must enter your username!"),
         password: Yup.string().min(4).max(20).required("You must enter your password!"),
+        re_password: Yup.string().min(4).max(20).required("You must enter your re-password!"),
     });
 
     const handleRegister = (data) => {
-        axios.post("http://localhost:3001/auth/register", data).then((res) => {
-            toast.success("Register success! You can login now!");
-            navigator(`/login`);
-            console.log(data);
-        });
+        if (data.password === data.re_password) {
+            axios.post("http://localhost:3001/auth/register", data).then((res) => {
+                toast.success("Register success! You can login now!");
+                navigator(`/login`);
+                // console.log(data);
+            });
+        }
+        else {
+            toast.error("Your password doesn't match!");
+        }
     };
 
     return (
@@ -43,11 +50,22 @@ function Register() {
                     <label>Password: </label>
                     <Field
                         autoComplete="off"
+                        type="password"
                         id="inputRegister"
                         name="password"
                         placeholder="(Password...)"
                     />
                     <ErrorMessage name="password" component="span"/>
+
+                    <label>Re-password: </label>
+                    <Field
+                        autoComplete="off"
+                        type="password"
+                        id="inputRegister"
+                        name="re_password"
+                        placeholder="(Password...)"
+                    />
+                    <ErrorMessage name="re_password" component="span"/>
 
                     <button className="btn-register" type="submit">Register</button>
                 </Form>

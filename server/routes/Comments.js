@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { Comments } = require('../models');
-const { validToken } = require('../middlewares/AuthenMiddleware');
+const {validateToken} = require('../middlewares/AuthenMiddleware');
+// Require thuộc tính validateToken đã được tạo và xuất từ AuthenMiddleware
 
 router.get('/:postId', async(req, res) => {
     const postId = req.params.postId;
@@ -9,8 +10,10 @@ router.get('/:postId', async(req, res) => {
     res.json(comments);
 });
 
+const app = express();
+
 // Data -> Post -> Go to validTokenMiddleware to check Token User -> (OK) Continue processing...
-router.post('/', validToken, async (req, res) => {
+router.post('/', validateToken, async (req, res) => {
     const comment = req.body;
     await Comments.create(comment);
     res.json(comment);

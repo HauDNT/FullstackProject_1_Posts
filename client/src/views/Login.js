@@ -27,12 +27,13 @@ function Login() {
             if (res.data.error) 
                 alert(res.data.error);
             else {
-                localStorage.setItem("accessToken", res.data);   
-                setAuthState(true);
+                localStorage.setItem("accessToken", res.data.token); 
+                setAuthState({  username: res.data.username, 
+                                id: res.data.id, 
+                                status: true});
                 navigator('/');
                 toast.success("Login success!");
             }
-                // Get token int json data from server and send to localStorage in client
         });
     };
 

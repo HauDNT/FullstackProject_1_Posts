@@ -12,15 +12,37 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function App() {
-    const [authState, setAuthState] = useState(false);
+    const [authState, setAuthState] = useState({
+        username: "", 
+        id: 0, 
+        status: false
+    });
     
     // Dùng useEffrect và useState để kiểm soát token, phòng chống sử dụng Token giả để login:
     useEffect(() => {
-        axios.get('http://localhost:3001/auth/auth', {headers: {accessToken: localStorage.getItem('accessToken')}}).then((res) => {
-            if (res.data.error) setAuthState(false);
-            else setAuthState(true);
-        });
+        axios
+            .get('http://localhost:3001/auth/auth', {headers: {accessToken: localStorage.getItem('accessToken')}})
+            .then((res) => {
+                // Nếu đăng nhập không thành công thì lấy lại giá trị mặc định của authState và
+                // gán thuộc tính status = false
+                if (res.data.error) setAuthState({...authState, status: false});    
+
+                // Nếu đăng nhập thành công thì gán thuộc tính tương ứng:
+                else setAuthState({       
+                    username: res.data.username, 
+                    id: res.data.id, 
+                    status: true,
+                });
+            });
     }, []);
+
+    // Logout event:
+    const handleLogout = () => {
+        localStorage.removeItem("accessToken");
+        setAuthState({  username: "", 
+                        id: 0, 
+                        status: false});
+    }
 
     return (
         <div className='App'>
@@ -34,12 +56,20 @@ function App() {
                     <Link to="/createpost">Create a new post</Link>
 
                     {/* Nếu chưa có authState (chưa login) thì hiển thị nút đăng ký/nhập */}
-                    {!authState && (
+                    {!authState.status ? (
                         <>
                             <Link to="/login">Login</Link>
                             <Link to="/register">Register</Link>
                         </>
+                    ) : (
+                        <>
+                            <button onClick={handleLogout}>Logout</button>
+                            {/* <Link to="/logout">Logout</Link> */}
+                            
+                        </>
                     )}
+
+                    <h3>{authState.username}</h3>
                 </div>
                 <Routes>
                     <Route path='/' exact Component={Home}/>

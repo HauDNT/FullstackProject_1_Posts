@@ -23,4 +23,17 @@ router.post('/', validateToken, async (req, res) => {
     res.json(comment);
 });
 
+// Hàm xóa comment:
+router.delete('/:commentId', validateToken, async (req, res) => {
+    const commentId = req.params.commentId;
+
+    await Comments.destroy({
+        where: {
+            id: commentId,
+        }
+    });
+
+    res.json("Deleted comment!");   // Xóa xong thì trả về response để client cập nhật trạng thái
+});
+
 module.exports = router;

@@ -1,14 +1,16 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useContext} from "react";
 import {useParams} from 'react-router-dom';
 import axios from 'axios';
 import '../styles/Post.scss';
 import { toast } from 'react-toastify';
+import { AuthContext } from "../helpers/AuthContext";
 
 function Post() {
     let {id} = useParams();
     const [postObject, setPostObject] = useState({});           // Một bài Post là một đối tượng
     const [commentsObject, setCommentsObject] = useState([]);   // Comments có rất nhiều nên nó là một mảng.
     const [newComment, setNewComment] = useState("");
+    const {authState} = useContext(AuthContext);
 
     useEffect(() => {
         axios.get(`http://localhost:3001/posts/${id}`).then((res) => {
@@ -47,6 +49,18 @@ function Post() {
         else {
             toast.error("You must type something!");
         }
+    };
+
+    const deleteComment = (id) => {
+        axios
+            .delete(`http://localhost:3001/comments/${id}`, {headers: {accessToken: localStorage.getItem("accessToken")}})
+            .then(() => {
+                setCommentsObject(commentsObject.filter((val) => {
+                    return val.id !== id;
+                }));
+            })
+            // Cập nhật commentsObject bằng cách lọc ra các bình luận với id không trùng với id của bình luận được xóa. 
+            // Điều này sẽ xóa bình luận được xóa khỏi mảng commentsObject.
     }
 
     return (
@@ -65,6 +79,9 @@ function Post() {
                             <div key={key} className='comment'>
                                 { comment.commentBody }
                                 <label> - {comment.username}</label>
+                                
+                                {/* Kiểm tra nếu username trong AuthContext là username của comment nào thì hiện nút 'Xóa' */}
+                                {authState.username === comment.username && <button onClick={() => {deleteComment(comment.id)}}>X</button>}
                             </div>
                         )
                     })}

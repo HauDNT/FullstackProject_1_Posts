@@ -29,17 +29,26 @@ router.post('/login', async (req, res) => {
         bcrypt.compare(password, user.password).then((match) => {
             if (!match) res.json({error: "Password isn't correct!"});
 
-            const accessToken = sign({username: user.username, id: user.id}, "importantsecret");    
+            const accessToken = sign({username: user.username, id: user.id}, "importantsecret");
                 // Generate encrypt string accessToken
                 // "importantsecret" will give in AuthenMiddleware to check the accessToken!
                 
-            res.json(accessToken);  // Give token to json data
+            res.json({token: accessToken, username: username, id: user.id});  // Give token to json data
         });
     }
 });
 
+// Kiểm tra token có hợp lệ hay không (giả hay thật)
+// Trả về thông tin của người dùng đăng nhập:
 router.get('/auth', validateToken, (req, res) => {
     res.json(req.user);
-})
+});
+
+// Logout
+// router.get('/logout', () => {
+//     sessionStorage.removeItem("accessToken");
+//     const [authState, setAuthState] = useState(false);
+//     setAuthState(false);
+// });
 
 module.exports = router;

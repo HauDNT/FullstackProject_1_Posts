@@ -10,12 +10,5 @@ module.exports = (sequelize, DataTypes) => {
         },
     });
 
-    // Error's here!
-    // Users.associate = (models) => {
-    //     Users.hasMany(models.Posts, {
-    //         onDelete: 'cascade',
-    //     })
-    // }
-
     return Users;
 }

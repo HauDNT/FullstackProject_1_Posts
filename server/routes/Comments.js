@@ -10,11 +10,15 @@ router.get('/:postId', async(req, res) => {
     res.json(comments);
 });
 
-const app = express();
-
 // Data -> Post -> Go to validTokenMiddleware to check Token User -> (OK) Continue processing...
 router.post('/', validateToken, async (req, res) => {
     const comment = req.body;
+
+    // Lấy username mà người dùng đã thực hiện comment và thêm thuộc tính này vào
+    // đối tượng 'comment':
+    const usernameCommented = req.user.username;
+    comment.username = usernameCommented;
+
     await Comments.create(comment);
     res.json(comment);
 });

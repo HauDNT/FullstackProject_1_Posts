@@ -22,10 +22,24 @@ function CreatePost() {
     });
 
     const onSubmit = (data) => {
-        axios.post('http://localhost:3001/posts', data).then((res) => {
-            navigate(`/`);
-            toast.success("Add new post success!");
-        });
+        axios
+            .post('http://localhost:3001/posts', 
+                data, 
+                {
+                    // Authen token:
+                    headers: {
+                        accessToken: localStorage.getItem("accessToken")
+                }
+            })
+            .then((res) => {
+                if (res.data.error) {
+                    toast.error("You must login!");
+                }
+                else {
+                    navigate(`/`);
+                    toast.success("Add new post success!");
+                }
+            });
     };
 
     return(

@@ -1,10 +1,15 @@
-import React from "react";
+import React, {useState, useContext} from "react";
 import axios from "axios";
 import * as Yup from 'yup';
 import {Formik, Form, Field, ErrorMessage} from 'formik';
 import '../styles/Register.scss';
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../helpers/AuthContext";
 
 function Login() {
+    let navigator = useNavigate();
+    
     const initialValues = {
         username: '',
         password: '',
@@ -15,13 +20,19 @@ function Login() {
         password: Yup.string().min(4).max(20).required("You must enter your password!"),
     });
 
+    const {setAuthState} = useContext(AuthContext);
+
     const handleLogin = (data) => {
         axios.post("http://localhost:3001/auth/login", data).then((res) => {
             if (res.data.error) 
                 alert(res.data.error);
-            else
-                sessionStorage.setItem("accessToken", res.data);   
-                // Get token int json data from server and send to sessionStorage in client
+            else {
+                localStorage.setItem("accessToken", res.data);   
+                setAuthState(true);
+                navigator('/');
+                toast.success("Login success!");
+            }
+                // Get token int json data from server and send to localStorage in client
         });
     };
 

@@ -29,7 +29,7 @@ function Post() {
                 {
                     // Authen token:
                     headers: {
-                        accessToken: sessionStorage.getItem("accessToken")
+                        accessToken: localStorage.getItem("accessToken")
                     }
                 })
                 .then((res) => {
@@ -37,7 +37,7 @@ function Post() {
                         toast.error("You must login!");
                     }
                     else {
-                        const commentAdded = {commentBody: newComment};
+                        const commentAdded = {commentBody: newComment, username: res.data.username};
                         setCommentsObject([...commentsObject, commentAdded]);
                         setNewComment("");
                         toast.success("Comment success!");
@@ -62,7 +62,10 @@ function Post() {
                 <div className="listOfComments">
                     {commentsObject.map((comment, key) => {
                         return (
-                            <div key={key} className='comment'>{ comment.commentBody }</div>
+                            <div key={key} className='comment'>
+                                { comment.commentBody }
+                                <label> - {comment.username}</label>
+                            </div>
                         )
                     })}
                 </div>

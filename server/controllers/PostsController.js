@@ -1,8 +1,8 @@
-const { Posts } = require('../models');
+const { Posts, Likes } = require('../models');
 
 class PostsController {
     async getListOfPosts(req, res) {
-        const listOfPosts = await Posts.findAll();
+        const listOfPosts = await Posts.findAll({include: [Likes]});
         res.json(listOfPosts);
     };
 

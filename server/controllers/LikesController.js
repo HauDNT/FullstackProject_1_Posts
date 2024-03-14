@@ -2,7 +2,7 @@ const {Likes} = require('../models');
 
 class LikesController {
     async test(req, res) {
-        const PostId = req.query.PostId;
+        const {PostId} = req.body;
         const UserId = req.user.id;
 
         const found = await Likes.findOne({
@@ -11,10 +11,10 @@ class LikesController {
 
         if (!found) {
             await Likes.create({PostId: PostId, UserId: UserId});
-            res.json("Liked the Post");
+            res.json({liked: true});
         } else {
             await Likes.destroy({where: {PostId: PostId, UserId: UserId}});
-            res.json("Unliked the Post");
+            res.json({liked: false});
         }
     }
 }

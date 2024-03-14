@@ -42,7 +42,7 @@ function App() {
         setAuthState({  username: "", 
                         id: 0, 
                         status: false});
-    }
+    };
 
     return (
         <div className='App'>

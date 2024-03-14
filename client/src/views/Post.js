@@ -80,7 +80,7 @@ function Post() {
                                 { comment.commentBody }
                                 <label> - {comment.username}</label>
                                 
-                                {/* Kiểm tra nếu username trong AuthContext là username của comment nào thì hiện nút 'Xóa' */}
+                                {/* Kiểm tra nếu username trong AuthContext là username của comment này thì hiện nút 'Xóa' */}
                                 {authState.username === comment.username && <button onClick={() => {deleteComment(comment.id)}}>X</button>}
                             </div>
                         )

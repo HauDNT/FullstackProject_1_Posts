@@ -1,6 +1,6 @@
 import React from 'react';
-import {Formik, Form, Field, ErrorMessage} from 'formik';
 import '../styles/CreatePost.scss';
+import {Formik, Form, Field, ErrorMessage} from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
@@ -29,8 +29,9 @@ function CreatePost() {
                     // Authen token:
                     headers: {
                         accessToken: localStorage.getItem("accessToken")
+                    }
                 }
-            })
+            )
             .then((res) => {
                 if (res.data.error) {
                     toast.error("You must login!");
@@ -73,7 +74,7 @@ function CreatePost() {
                     <ErrorMessage name="username" component="span" />
                     <br/>
 
-                    <button className="btn-createpost" type="submit">Create post!</button>
+                    <button className="btn-createpost" type="submit">Create post</button>
                 </Form>
             </Formik>
         </div>

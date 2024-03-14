@@ -65,7 +65,6 @@ function App() {
                         <>
                             <button onClick={handleLogout}>Logout</button>
                             {/* <Link to="/logout">Logout</Link> */}
-                            
                         </>
                     )}
 

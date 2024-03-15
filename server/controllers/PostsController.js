@@ -3,7 +3,9 @@ const { Posts, Likes } = require('../models');
 class PostsController {
     async getListOfPosts(req, res) {
         const listOfPosts = await Posts.findAll({include: [Likes]});
-        res.json(listOfPosts);
+        const likedPosts = await Likes.findAll({where: {UserId: req.user.id}});
+
+        res.json({listOfPosts: listOfPosts, likedPosts: likedPosts});
     };
 
     async getPostById(req, res) {

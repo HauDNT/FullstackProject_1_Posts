@@ -8,6 +8,7 @@ import Post from './views/Post';
 import Login from './views/Login';
 import Register from './views/Register';
 import {AuthContext} from './helpers/AuthContext';
+import PageNotFound from './views/PageNotFound';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -76,12 +77,13 @@ function App() {
                     <Route path='/post/:id' exact Component={Post}/>
                     <Route path='/login' exact Component={Login}/>
                     <Route path='/register' exact Component={Register}/>
+                    <Route path='*' exact Component={PageNotFound}/>
                 </Routes>
             </BrowserRouter>
         </AuthContext.Provider>
 
         <ToastContainer
-            position="top-right"
+            position="top-center"
             autoClose={3000}
             hideProgressBar={false}
             newestOnTop={false}

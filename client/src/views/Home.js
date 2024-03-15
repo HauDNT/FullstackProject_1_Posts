@@ -3,16 +3,26 @@ import axios from 'axios';
 import {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import { toast } from "react-toastify";
 
 function Home() {
     let navigate = useNavigate();
     const [listOfPosts, setListOfPosts] = useState([]);
+    const [likedPosts, setLikedPosts] = useState([]);
 
     useEffect(() => {
-      axios.get('http://localhost:3001/posts/').then((res) => {
-        setListOfPosts(res.data);
-      });
-    }, []);
+        axios
+                .get('http://localhost:3001/posts/', {headers: {accessToken: localStorage.getItem("accessToken")}})
+                .then((res) => {
+                    if (localStorage.getItem("accessToken")) {
+                        setListOfPosts(res.data.listOfPosts);
+                        setLikedPosts(res.data.likedPosts.map((like) => {return like.PostId}));
+                    }
+                    else {
+                        toast.warning("You must login to see the posts!");
+                    }
+                });
+        }, []);
 
     const likeAPost = (postId) => {
         axios
@@ -21,18 +31,26 @@ function Home() {
                     {headers: {accessToken: localStorage.getItem('accessToken')}}
             )
             .then((res) => {
-                setListOfPosts(listOfPosts.map((post) => {
-                    if (post.id === postId) {
-                        if (res.data.liked)
-                            return {...post, Likes: [...post.Likes, 0]};
-                        else 
-                            return {...post, Likes: post.Likes.slice(0, -1)};
-                            // Tạo ra một bản sao của mảng Likes mà không làm thay đổi mảng gốc.
-                            // Loại bỏ phần tử cuối cùng và trả về mảng mới này mà không ảnh hưởng đến mảng gốc.
-                    } else {
-                        return post;
-                    }
-                }))
+                setListOfPosts(
+                    listOfPosts.map((post) => {
+                        if (post.id === postId) {
+                            if (res.data.liked)
+                                return {...post, Likes: [...post.Likes, 0]};
+                            else 
+                                return {...post, Likes: post.Likes.slice(0, -1)};
+                                // Tạo ra một bản sao của mảng Likes mà không làm thay đổi mảng gốc.
+                                // Loại bỏ phần tử cuối cùng và trả về mảng mới này mà không ảnh hưởng đến mảng gốc.
+                        } else {
+                            return post;
+                        }
+                    })
+                );
+
+                if (localStorage.getItem("accessToken") && likedPosts.includes(postId)) {
+                    setLikedPosts(likedPosts.filter((id) => {return id !== postId}))
+                } else {
+                    setLikedPosts([...likedPosts, postId]);
+                }
             });
     }
 
@@ -42,10 +60,15 @@ function Home() {
                 return (
                     <div key={key} className='post'>
                         <div className='title' onClick={() => {navigate(`/post/${value.id}`)}}>{value.title}</div>
-                        <div className='body' onClick={() => {navigate(`/post/${value.id}`)}}>{value.postText}</div>
+                        <div className='body' onClick={() => {navigate(`/post/${value.id}`)}}>
+                            {value.postText}
+                        </div>
                         <div className='footer'>
                             {value.username}
-                            <ThumbUpIcon onClick={() => {likeAPost(value.id)}} />
+                            <ThumbUpIcon 
+                                onClick={() => {likeAPost(value.id)}} 
+                               // className={likedPosts.includes(value.id) ? "unlikeBtn" : "likeBtn"}
+                            />
 
                             <label>{value.Likes.length}</label>
                         </div>

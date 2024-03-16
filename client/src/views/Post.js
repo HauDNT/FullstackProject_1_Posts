@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useContext} from "react";
-import {useParams} from 'react-router-dom';
+import {useParams, useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import '../styles/Post.scss';
 import { toast } from 'react-toastify';
@@ -7,6 +7,7 @@ import { AuthContext } from "../helpers/AuthContext";
 
 function Post() {
     let {id} = useParams();
+    let navigate = useNavigate();
     const [postObject, setPostObject] = useState({});           // Một bài Post là một đối tượng
     const [commentsObject, setCommentsObject] = useState([]);   // Comments có rất nhiều nên nó là một mảng.
     const [newComment, setNewComment] = useState("");
@@ -63,13 +64,29 @@ function Post() {
             // Điều này sẽ xóa bình luận được xóa khỏi mảng commentsObject.
     }
 
+    const handleDeletePost = (id) => {
+        axios
+            .delete(`http://localhost:3001/posts/${id}`, 
+                    {headers: {accessToken: localStorage.getItem("accessToken")},
+            })
+            .then(() => {
+                navigate('/');
+            });
+    }
+
     return (
         <div className="postPage">
             <div className="leftSide">
                 <div className="post" id="invidual">
                     <div className="title">{postObject.title}</div>
                     <div className="body">{postObject.postText}</div>
-                    <div className="footer">{postObject.username}</div>
+                    <div className="footer">
+                        {postObject.username}
+                        {
+                            authState.username === postObject.username &&
+                            <button onClick={() => handleDeletePost(postObject.id)}>Delete</button>
+                        }
+                    </div>
                 </div>
             </div>
             <div className="rightSide">
@@ -81,7 +98,7 @@ function Post() {
                                 <label> - {comment.username}</label>
                                 
                                 {/* Kiểm tra nếu username trong AuthContext là username của comment này thì hiện nút 'Xóa' */}
-                                {authState.username === comment.username && <button onClick={() => {deleteComment(comment.id)}}>X</button>}
+                                {authState.username === comment.username && <button onClick={(e) => {deleteComment(comment.id)}}>X</button>}
                             </div>
                         )
                     })}

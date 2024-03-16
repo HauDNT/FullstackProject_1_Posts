@@ -1,17 +1,23 @@
-import React from "react";
+import React, { useContext } from "react";
 import axios from 'axios';
 import {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { toast } from "react-toastify";
+import {AuthContext} from '../helpers/AuthContext';
 
 function Home() {
     let navigate = useNavigate();
     const [listOfPosts, setListOfPosts] = useState([]);
     const [likedPosts, setLikedPosts] = useState([]);
+    const {authState} = useContext(AuthContext);
 
     useEffect(() => {
-        axios
+        if (!localStorage.getItem("accessToken") && !authState.status) {
+            navigate('/login');
+        }
+        else {
+            axios
                 .get('http://localhost:3001/posts/', {headers: {accessToken: localStorage.getItem("accessToken")}})
                 .then((res) => {
                     if (localStorage.getItem("accessToken")) {
@@ -22,7 +28,8 @@ function Home() {
                         toast.warning("You must login to see the posts!");
                     }
                 });
-        }, []);
+            }
+    }, []);
 
     const likeAPost = (postId) => {
         axios

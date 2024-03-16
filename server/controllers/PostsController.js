@@ -16,9 +16,22 @@ class PostsController {
 
     async createNewPost(req, res) {
         const post = req.body;
+        post.username = req.user.username;
         await Posts.create(post);
         res.json(post);
     };
+
+    async deletePost(req, res) {
+        const postId = req.params.postId;
+        
+        await Posts.destroy({
+            where: {
+                id: postId,
+            },
+        });
+
+        res.json({ message: "DELETED POST" + postId });
+    }
 }
 
 module.exports = new PostsController();

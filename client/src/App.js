@@ -53,8 +53,6 @@ function App() {
         <AuthContext.Provider value={{authState, setAuthState}}>
             <BrowserRouter>
                 <div className="navbar">
-                    <Link to="/">Home Page</Link>
-                    <Link to="/createpost">Create a new post</Link>
 
                     {/* Nếu chưa có authState (chưa login) thì hiển thị nút đăng ký/nhập */}
                     {!authState.status ? (
@@ -64,6 +62,8 @@ function App() {
                         </>
                     ) : (
                         <>
+                            <Link to="/">Home Page</Link>
+                            <Link to="/createpost">Create a new post</Link>
                             <button onClick={handleLogout}>Logout</button>
                             {/* <Link to="/logout">Logout</Link> */}
                         </>

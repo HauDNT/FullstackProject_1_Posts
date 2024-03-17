@@ -68,10 +68,11 @@ function Home() {
                         <div className='footer'>
                             {value.username}
                             <ThumbUpIcon 
+                                className="like-icon"
                                 onClick={() => {likeAPost(value.id)}} 
                             />
 
-                            <label>{value.Likes.length}</label>
+                            <label className="like-number">{value.Likes.length}</label>
                         </div>
                     </div>
                 )

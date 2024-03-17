@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from 'react-router-dom';
 import axios from "axios";
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 
 function Profile() {
     let {id} = useParams();
@@ -34,7 +35,8 @@ function Profile() {
                             <div className='body'>{value.postText}</div>
                             <div className='footer'>
                                 {value.username}
-                                <label>{value.Likes.length}</label>
+                                <ThumbUpIcon className="like-icon"/>
+                                <label className="like-number">{value.Likes.length}</label>
                             </div>
                         </div>
                     )

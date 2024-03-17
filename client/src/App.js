@@ -1,5 +1,5 @@
 import './styles/App.scss';
-import {BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import {BrowserRouter, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Home from './views/Home';
@@ -9,6 +9,7 @@ import Login from './views/Login';
 import Register from './views/Register';
 import {AuthContext} from './helpers/AuthContext';
 import PageNotFound from './views/PageNotFound';
+import Profile from './views/Profile';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -64,8 +65,7 @@ function App() {
                         <>
                             <Link to="/">Home Page</Link>
                             <Link to="/createpost">Create a new post</Link>
-                            <button onClick={handleLogout}>Logout</button>
-                            {/* <Link to="/logout">Logout</Link> */}
+                            <Link className='logout' to="/login" onClick={handleLogout}>Logout</Link>
                         </>
                     )}
 
@@ -77,6 +77,7 @@ function App() {
                     <Route path='/post/:id' exact Component={Post}/>
                     <Route path='/login' exact Component={Login}/>
                     <Route path='/register' exact Component={Register}/>
+                    <Route path='/profile/:id' exact Component={Profile}/>
                     <Route path='*' exact Component={PageNotFound}/>
                 </Routes>
             </BrowserRouter>

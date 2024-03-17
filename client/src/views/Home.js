@@ -20,13 +20,8 @@ function Home() {
             axios
                 .get('http://localhost:3001/posts/', {headers: {accessToken: localStorage.getItem("accessToken")}})
                 .then((res) => {
-                    if (localStorage.getItem("accessToken")) {
-                        setListOfPosts(res.data.listOfPosts);
-                        setLikedPosts(res.data.likedPosts.map((like) => {return like.PostId}));
-                    }
-                    else {
-                        toast.warning("You must login to see the posts!");
-                    }
+                    setListOfPosts(res.data.listOfPosts);
+                    setLikedPosts(res.data.likedPosts.map((like) => {return like.PostId}));
                 });
             }
     }, []);
@@ -74,7 +69,6 @@ function Home() {
                             {value.username}
                             <ThumbUpIcon 
                                 onClick={() => {likeAPost(value.id)}} 
-                               // className={likedPosts.includes(value.id) ? "unlikeBtn" : "likeBtn"}
                             />
 
                             <label>{value.Likes.length}</label>

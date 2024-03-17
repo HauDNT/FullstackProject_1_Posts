@@ -14,8 +14,15 @@ class PostsController {
         res.json(thisPost);
     };
 
+    async getPostByUserId(req, res) {
+        const userId = req.params.userId;
+        const listOfPosts = await Posts.findAll({where: {UserId: userId}, include: [Likes]});
+        res.json(listOfPosts);
+    };
+
     async createNewPost(req, res) {
         const post = req.body;
+        post.UserId = req.user.id;
         post.username = req.user.username;
         await Posts.create(post);
         res.json(post);

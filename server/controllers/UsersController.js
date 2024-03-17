@@ -32,7 +32,7 @@ class UsersController {
                     // Generate encrypt string accessToken
                     // "importantsecret" will give in AuthenMiddleware to check the accessToken!
                     
-                res.json({token: accessToken, username: username, id: user.id});  // Give token to json data
+                return res.json({token: accessToken, username: username, id: user.id});  // Give token to json data
             });
         }
     };

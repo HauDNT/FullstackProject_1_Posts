@@ -25,14 +25,14 @@ function Login() {
     const handleLogin = (data) => {
         axios.post("http://localhost:3001/auth/login", data).then((res) => {
             if (res.data.error) 
-                alert(res.data.error);
+                toast.error(res.data.error);
             else {
                 localStorage.setItem("accessToken", res.data.token); 
                 setAuthState({  username: res.data.username, 
                                 id: res.data.id, 
                                 status: true});
                 navigator('/');
-                toast.success("Login success!");
+                toast.success(res.data.message);
             }
         });
     };

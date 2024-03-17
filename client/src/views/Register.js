@@ -23,10 +23,9 @@ function Register() {
 
     const handleRegister = (data) => {
         if (data.password === data.re_password) {
-            axios.post("http://localhost:3001/auth/register", data).then((res) => {
+            axios.post("http://localhost:3001/auth/register", data).then(() => {
                 toast.success("Register success! You can login now!");
                 navigator(`/login`);
-                // console.log(data);
             });
         }
         else {

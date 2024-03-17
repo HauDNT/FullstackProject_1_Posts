@@ -31,6 +31,17 @@ body {
                 align-items: center;
             }
 
+            .usernameTag {
+                position: absolute;
+                font-size: 20px;
+                right: 130px;
+
+                &:hover {
+                    text-decoration: underline;
+
+                }
+            }
+
             .loggedInContainer {
                 flex: 50%;
                 height: 100%;
@@ -51,7 +62,6 @@ body {
 
                 &:hover {
                     background-color: red;
-                    text-decoration: underline;
                 }
             }
 

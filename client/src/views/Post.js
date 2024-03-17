@@ -62,7 +62,7 @@ function Post() {
             })
             // Cập nhật commentsObject bằng cách lọc ra các bình luận với id không trùng với id của bình luận được xóa. 
             // Điều này sẽ xóa bình luận được xóa khỏi mảng commentsObject.
-    }
+    };
 
     const handleDeletePost = (id) => {
         axios
@@ -72,14 +72,54 @@ function Post() {
             .then(() => {
                 navigate('/');
             });
+    };
+
+    const editPost = (option) => {
+        if (option === 'title') {
+            let newTitle = prompt("Enter new title: ");
+
+            axios
+                .put("http://localhost:3001/posts/title", 
+                    {newTitle: newTitle, id: id},
+                    {headers: {accessToken: localStorage.getItem("accessToken")}});
+
+                setPostObject({...postObject, title: newTitle});
+                toast.success("Update title success!");
+        } else {
+            let newPostText = prompt("Enter new post text: ");
+
+            axios
+                .put("http://localhost:3001/posts/postText", 
+                    {newText: newPostText, id: id},
+                    {headers: {accessToken: localStorage.getItem("accessToken")}});
+                
+                setPostObject({...postObject, postText: newPostText});
+                toast.success("Updated post text success!");
+        }
     }
 
     return (
         <div className="postPage">
             <div className="leftSide">
                 <div className="post" id="invidual">
-                    <div className="title">{postObject.title}</div>
-                    <div className="body">{postObject.postText}</div>
+                    <div className="title" onClick={() => 
+                            {
+                                if (authState.username === postObject.username) 
+                                    editPost('title');
+                            }
+                        }>
+                        {postObject.title}
+                    </div>
+                    
+                    <div className="body" onClick={() => 
+                            {
+                                if (authState.username === postObject.username) 
+                                    editPost('body');
+                            }
+                        }>
+                        {postObject.postText}
+                    </div>
+
                     <div className="footer">
                         {postObject.username}
                         {

@@ -29,7 +29,7 @@ class PostsController {
     };
 
     async deletePost(req, res) {
-        const postId = req.params.postId;
+        const postId = req.params.id;
         
         await Posts.destroy({
             where: {
@@ -38,7 +38,19 @@ class PostsController {
         });
 
         res.json({ message: "DELETED POST" + postId });
-    }
+    };
+
+    async editPostTitle(req, res) {
+        const {newTitle, id} = req.body;
+        await Posts.update({title: newTitle}, {where: {id: id}});
+        res.json(newTitle);
+    };
+
+    async editPostText(req, res) {
+        const {newText, id} = req.body;
+        await Posts.update({postText: newText}, {where: {id: id}});
+        res.json(newText);
+    };
 }
 
 module.exports = new PostsController();

@@ -10,6 +10,7 @@ import Register from './views/Register';
 import {AuthContext} from './helpers/AuthContext';
 import PageNotFound from './views/PageNotFound';
 import Profile from './views/Profile';
+import ChangePassword from './views/ChangePassword';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -69,7 +70,8 @@ function App() {
                         </>
                     )}
 
-                    <h3>{authState.username}</h3>
+
+                    <Link className='usernameTag' to={`/profile/${authState.id}`}>{authState.username}</Link>
                 </div>
                 <Routes>
                     <Route path='/' exact Component={Home}/>
@@ -78,6 +80,7 @@ function App() {
                     <Route path='/login' exact Component={Login}/>
                     <Route path='/register' exact Component={Register}/>
                     <Route path='/profile/:id' exact Component={Profile}/>
+                    <Route path='/changepassword' exact Component={ChangePassword}/>
                     <Route path='*' exact Component={PageNotFound}/>
                 </Routes>
             </BrowserRouter>
